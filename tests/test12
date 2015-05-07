@@ -1,0 +1,10 @@
+cd::gc 1
+ab::gc 5
+e
+lmno::gc 1
+k::gc 1
+
+fghij
+::gc 1 2
+-----::s
+::q

@@ -1,0 +1,24 @@
+Am implementat in fisiere separate functii pentru lucrul cu stive si cozi 
+ambele dublu-inlantuite. 
+
+Consider comanda orice intrare (replace, undo, redo, save, quit, etc.) inclusiv
+o linie text. Fiecare comanda este o structura ce are un tip, parametrii, si 
+informatia aditionala cu care vine (linia text -> textul, comanda replace -> 
+vector cu textele 'old_text' si 'new_text')
+
+Sunt doua stive de comenzi, una in care adaug tot timpul input-ul nou (DoList),
+iar cealalta (RedoList) este stiva in care mut comenzile din DoList la 
+intalnirea comenzii undo. La redo, se intampla exact invers, mut din RedoList
+in DoList.
+
+In cazul unei comenzi de tip linie text, elementele sunt salvate intr-o coada,
+fiecare caracter fiind un element din acea coada.
+
+La intalnirea comenzii save se construieste rezultatul pe baza comenzilor din
+DoList care se executa in sens invers (de jos in sus). Rezultatul este salvat
+intr-o coada separata. Pozitia cursorului este data de un pointer care se 
+plimba prin noua coada, pe baza acestuia sunt implementate si restul comenzilor
+(backspace, delete, delete line, replace, etc.)
+
+Am implementat si bonusul, comanda replace <old_text> <new_text> functioneaza
+si daca cele doua texte au lungimi diferite.

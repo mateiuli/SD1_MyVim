@@ -1,0 +1,33 @@
+aaaaaaaaaa
+bbbbbbbbbb
+cccccccccc
+::s
+dddddddddd
+eeeeeeeeee::b
+::b
+::b
+::b
+::b
+::gl 2
+..........
+::gc 6 4
+xxxxx
+xxxxx::s
+::gl 3
+,,,,,
+::gl 3
+-----::gc 11
+
+
+::s
+::dl 3
+::gl 3
+::dl
+::gl 3
+::dl
+::gl 1
+::d
+::d
+::d
+::d 3
+::q

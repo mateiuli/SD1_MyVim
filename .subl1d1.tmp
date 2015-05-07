@@ -1,0 +1,84 @@
+#include "MyVim.hpp"
+
+int main(int argc, char **args)
+{
+	// tipul comenzii curente
+	CMDType cmdType;
+
+	// buffer pentru citire comanda
+	char buff[BUFF_SIZE + 1];
+
+	// argumentele comenzii
+	int cmd_args[MAX_ARGS];
+
+	// pozitia curenta a cursorului
+	Position cursor = {1, 1};
+
+	// lista cu comenzi de executat
+	Stack *DoList = s_init();
+
+	// lista cu comenzi anulate (UNDO)
+	Stack *RedoList = s_init();
+
+	do {
+		printf("[l, c] = [%d, %d]\n", cursor.l, cursor.c);
+
+		// ficare caracter e un element intr-o lista
+		Queue *line = q_init();
+
+		// citesc o comanda si o salvez in buff, iar linia
+		// text (daca exista) se salveaza in coada line 
+		cmdType = readCommand(buff, cmd_args, line);		
+		
+		printf("Comanda: %s\n", buff);
+		printf("Linia text: ");
+		q_print(line);
+
+		// se pot primi doua comenzi in acelasi timp
+		// una TEXT_LINE, iar cealalta o comanda ::<cmd>
+		if(cmdType == TEXT_LINE || !q_isEmpty(line))
+			s_push(DoList, newTextCmd(line));
+
+		switch(cmdType) {
+			case GOTO_LINE:
+				cursor.l = cmd_args[0];				
+				break;
+
+			case GOTO_CHAR:
+				cursor.c = cmd_args[0];
+				cursor.l = cmd_args[1] > 0 ? cmd_args[1] : cursor.l;
+				break;
+
+			case DELETE_LINE:
+				cmd_args[0] = cmd_args[0] > 0 ? cmd_args[0] : cursor.l;
+				break;
+
+			case UNDO:
+				s_push(RedoList, s_pop(DoList));
+				break;
+
+			case REDO:
+
+				break;
+
+			default:
+				// do nothing
+		}
+
+		// adaug pe stiva si comanda ce trebuie executata
+		if(isStackCommand(cmdType))
+			s_push(DoList, newCommand(cmdType, NULL, cmd_args));
+				
+
+	} while(cmdType != QUIT);
+
+	s_print(DoList);
+
+	// eliberez memoria
+	s_free(DoList);
+	s_free(RedoList);
+
+	return 0;
+}
+
+
